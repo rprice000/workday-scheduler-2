@@ -1,89 +1,33 @@
-// js here
-var tasks = {};
-///////////////////////////// CREATE TASK FUNCTION START
-var createTask = function(taskText, taskHour) {
-  var taskContainer = $("<div>").addClass("p-task-container");
-  var taskP = $("<p>").text(taskText);
-
-  taskContainer.append(taskP);
-
-  $("#hour-" + taskHour).append(taskContainer)
+tasks = {
+  hourNine: []
 }
-///////////////////////////// CREATE TASK FUNCTION END
-///////////////////////////// LOAD TASK FUNCTION START
-var loadTasks = function() {
-  tasks = JSON.parse(localStorage.getItem("tasks"));
+var nineTextArea;
+var hourNineDiv = document.querySelector("hour-nine")
 
-  if (!tasks) {
-    tasks = {
-      nine: [],
-      ten: [],
-      eleven: [],
-      twelve: [],
-      one: [],
-      two: [],
-      three: [],
-      four: [],
-      five: [],
-    }
-  }
+$("#hour-nine").on("click", function() {
+  nineTextArea = $("<textarea>").addClass("col-10").attr("id","nineArea");
+  $('#hour-nine').replaceWith(nineTextArea);
+  nineTextArea.trigger("focus");
+});
 
-  $.each(tasks, function(list, arr) {
-    console.log(list, arr);
 
-    arr.forEach(function(task) {
-      createTask(task.text, hour)
+$("#nine-save").click(function() {
+    var nineText = nineTextArea.val()
+
+    tasks.hourNine.push({
+      text: nineText
     })
-  })
-};
-///////////////////////////// LOAD TASK FUNCTION END
-///////////////////////////// SAVE TASK FUNCTION START
+  saveTasks()
+  newNineDiv = $("<div>").addClass("col-10 future description").attr("id", "hour-nine");
+  $("#nineArea").replaceWith(newNineDiv)
+  displayTasks()
+})
+
 var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
-///////////////////////////// SAVE TASK FUNCTION END
-/////////////////////////////EVENT LISTENER FOR WHEN CLICK TO EDIT A TASK START
-$(".description").on("click", "p", function() {
 
-  var text = $(this).text().trim();
-
-  var textInput = $("<textarea>").addClass("form-control").val(text);
-  $(this).replaceWith(textInput);
-
-  textInput.trigger("focus");
-});
-/////////////////////////////EVENT LISTENER FOR WHEN CLICK TO EDIT A TASK END
-/////////////////////////////EVENT LISTENER FOR WHEN CLICK OFF OF EDIT TASK START
-// editable field was un-focused
-$(".description").on("blur", "textarea", function() {
-  // get current value of textarea
-  var text = $(this).val();
-
-  // get status type and position in the list
-  var status = $(this)
-    .closest(".list-group")
-    .attr("id")
-    .replace("list-", "");
-  var index = $(this)
-    .closest(".list-group-item")
-    .index();
-
-  // update task in array and re-save to localstorage
-  tasks[status][index].text = text;
-  saveTasks();
-
-  // recreate p element
-  var taskP = $("<p>")
-    .addClass("m-1")
-    .text(text);
-
-  // replace textarea with new content
-  $(this).replaceWith(taskP);
-});
-/////////////////////////////EVENT LISTENER FOR WHEN CLICK OFF OF EDIT TASK END
-
-$('#hour-nine').click(function(){
-  alert("YOU GOT ME");
-  var taskTextArea = $("<textarea>").addClass("col-10")
-  $('#hour-nine').replaceWith(taskTextArea)
-})
+var displayTasks = function() {
+  tasks = JSON.parse(localStorage.getItem("tasks"));
+  console.log(tasks.text)
+};
