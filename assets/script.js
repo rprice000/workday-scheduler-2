@@ -1,6 +1,6 @@
-tasks = {
-  hourNine: []
-}
+
+
+var hourNine = [];
 var nineTextArea;
 var hourNineDiv = document.querySelector("hour-nine")
 
@@ -11,23 +11,24 @@ $("#hour-nine").on("click", function() {
 });
 
 
-$("#nine-save").click(function() {
+$("#nine-save").on("click", function() {
     var nineText = nineTextArea.val()
-
-    tasks.hourNine.push({
-      text: nineText
-    })
-  saveTasks()
-  newNineDiv = $("<div>").addClass("col-10 future description").attr("id", "hour-nine");
-  $("#nineArea").replaceWith(newNineDiv)
-  displayTasks()
+    hourNine.push(nineText)
+    saveTasks()
+    newNineDiv = $("<div>").addClass("col-10 future description").attr("id", "hour-nine");
+    $("#nineArea").replaceWith(newNineDiv)
+    displayTasks()
 })
 
 var saveTasks = function() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  localStorage.setItem("tasks", JSON.stringify(hourNine));
 };
 
 var displayTasks = function() {
-  tasks = JSON.parse(localStorage.getItem("tasks"));
-  console.log(tasks.text)
+  var nineTasks = JSON.parse(localStorage.getItem("tasks"));
+  console.log(nineTasks)
+  for (var i = 0; i < nineTasks.length; i++) {
+    var nineTasksP = $("<p>").text(nineTasks)
+    $("#hour-nine").append(nineTasksP)
+  }
 };
